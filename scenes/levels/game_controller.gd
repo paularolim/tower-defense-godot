@@ -2,9 +2,6 @@ extends Node2D
 
 @onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn.tscn")
 
-@onready var path2d = $"../Path2D"
-@onready var path_follow = $"../Path2D/PathFollow2D"
-
 const PATH_WIDTH : int = 10
 
 var drawing_line : bool = false
@@ -46,8 +43,12 @@ func create_follow_path() -> void:
 	var curve = Curve2D.new()
 	curve.add_point(tower_position)
 	curve.add_point(enemy_position)
-	path2d.curve = curve
 	
+	var path2d = Path2D.new()
+	var path_follow = PathFollow2D.new()
+	add_child(path2d)
+	path2d.add_child(path_follow)
+	path2d.curve = curve
 	path_follow.h_offset = 0
 	path_follow.v_offset = 0
 	path2d.add_to_group("path")
