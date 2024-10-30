@@ -9,6 +9,11 @@ var path_color : Color
 var tower_position : Vector2
 var enemy_position : Vector2
 
+var current_tower : Area2D
+var current_target : Area2D
+
+var paths = {}
+
 func _process(_delta: float) -> void:
 	#check_paths()
 	
@@ -52,6 +57,16 @@ func create_follow_path() -> void:
 	path_follow.h_offset = 0
 	path_follow.v_offset = 0
 	path2d.add_to_group("path")
+	
+	var current_tower_id = current_tower.get_instance_id()
+	var path_id = path2d.get_instance_id()
+	if !paths or !paths[current_tower_id]:
+		paths[current_tower_id] = [path_id]
+	else:
+		paths[current_tower_id].append(path_id)
+	current_tower.path_quantity = paths[current_tower_id].size()
+	
+	print(paths)
 	
 	tower_position = Vector2.ZERO
 	enemy_position = Vector2.ZERO

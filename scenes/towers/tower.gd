@@ -45,17 +45,19 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			var can_start_new_path = path_quantity < MAX_PATH_QUANTITY
-			if skin_type == SKIN_TYPE.BLUE && can_start_new_path:
+			if !can_start_new_path:
+				return
+			if skin_type == SKIN_TYPE.BLUE:
+				controller.current_tower = self
 				controller.start_drawing_from_item(position, path_color)
 			else:
+				controller.current_target = self
 				controller.finish_drawing_on_item(position)
 
 func _on_spawn_timer_timeout() -> void:
 	if path_quantity > 0:
-		print("spawn")
-
-func path_started() -> void:
-	path_quantity += 1
+		pass
+		#print("spawn")
 
 func set_skin() -> void:
 	var current = skins[skin_type]
