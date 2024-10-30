@@ -1,6 +1,10 @@
 extends PathFollow2D
 
-const MOVE_SPEED = 100.0
+enum SKIN_TYPE { DEFAULT, BLUE, GREEN, RED, YELLOW }
+
+@export var skin_type: SKIN_TYPE
+
+const MOVE_SPEED = 200.0
 const DAMAGE = 1
 
 var life = 1

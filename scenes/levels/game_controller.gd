@@ -50,7 +50,7 @@ func create_follow_path() -> void:
 	
 	var current_tower_id = current_tower.get_instance_id()
 	var path_id = path2d.get_instance_id()
-	if !paths or !paths[current_tower_id]:
+	if paths.is_empty() or !paths.get(current_tower_id):
 		paths[current_tower_id] = [path_id]
 	else:
 		paths[current_tower_id].append(path_id)

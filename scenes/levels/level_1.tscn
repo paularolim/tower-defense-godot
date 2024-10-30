@@ -22,7 +22,7 @@ score = 10
 [node name="Tower2" parent="." instance=ExtResource("2_nsjvg")]
 position = Vector2(277, 530)
 scale = Vector2(3, 3)
-score = 10
+score = 5
 
 [node name="Tower3" parent="." instance=ExtResource("2_nsjvg")]
 position = Vector2(823, 524)

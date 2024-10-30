@@ -16,10 +16,9 @@ texture = ExtResource("1_qm274")
 shape = SubResource("RectangleShape2D_uuy3w")
 
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 5.0
 
 [node name="LifeTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 5.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
