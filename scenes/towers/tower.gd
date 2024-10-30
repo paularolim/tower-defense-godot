@@ -31,6 +31,8 @@ var path_quantity = 0
 
 @export var skin_type: SKIN_TYPE
 
+@onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn.tscn")
+
 @onready var spawn_timer = $SpawnTimer
 @onready var skin = $Sprite2D
 @onready var controller = get_parent().get_node("Controller")
@@ -51,15 +53,23 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 				controller.current_tower = self
 				controller.start_drawing_from_item(position, path_color)
 			else:
-				controller.current_target = self
 				controller.finish_drawing_on_item(position)
 
 func _on_spawn_timer_timeout() -> void:
 	if path_quantity > 0:
-		pass
-		#print("spawn")
+		var id = get_instance_id()
+		var paths = controller.paths[id]
+		for path_id in paths:
+			var path_instance = instance_from_id(path_id)
+			var path_follow_instance = path_instance.get_child(0)
+			spawn(path_follow_instance)
 
 func set_skin() -> void:
 	var current = skins[skin_type]
 	skin.texture = current.texture
 	path_color = current.color
+
+func spawn(path_follow_instance: PathFollow2D) -> void:
+	var instance = pawn_scene.instantiate()
+	instance.scale = Vector2(2, 2)
+	path_follow_instance.add_child(instance)

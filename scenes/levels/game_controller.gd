@@ -1,7 +1,5 @@
 extends Node2D
 
-@onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn.tscn")
-
 const PATH_WIDTH : int = 10
 
 var drawing_line : bool = false
@@ -10,13 +8,10 @@ var tower_position : Vector2
 var enemy_position : Vector2
 
 var current_tower : Area2D
-var current_target : Area2D
 
 var paths = {}
 
 func _process(_delta: float) -> void:
-	#check_paths()
-	
 	if drawing_line:
 		queue_redraw()
 
@@ -39,10 +34,9 @@ func start_drawing_from_item(local_tower_position: Vector2, local_path_color: Co
 	path_color = local_path_color
 
 func finish_drawing_on_item(local_enemy_position: Vector2) -> void:
-	print("click another tower")
 	drawing_line = false
 	enemy_position = local_enemy_position
-	create_follow_path()  # Cria o caminho quando o ponto final é definido
+	create_follow_path()
 
 func create_follow_path() -> void:
 	var curve = Curve2D.new()
@@ -66,20 +60,5 @@ func create_follow_path() -> void:
 		paths[current_tower_id].append(path_id)
 	current_tower.path_quantity = paths[current_tower_id].size()
 	
-	print(paths)
-	
 	tower_position = Vector2.ZERO
 	enemy_position = Vector2.ZERO
-	
-	check_paths()
-
-func check_paths() -> void:
-	var paths = get_tree().get_nodes_in_group("path")
-	for path in paths:
-		var path_follow = path.get_child(0)
-		spawn_pawn(path_follow)
-
-func spawn_pawn(current_path_follow: PathFollow2D) -> void:
-	var instance = pawn_scene.instantiate()
-	instance.scale = Vector2(2, 2)
-	current_path_follow.add_child(instance)
