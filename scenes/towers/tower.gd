@@ -32,7 +32,7 @@ var path_quantity = 0
 @export var skin_type: SKIN_TYPE
 @export var score : int
 
-@onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn.tscn")
+@onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn_follower.tscn")
 
 @onready var spawn_timer = $SpawnTimer
 @onready var life_timer = $LifeTimer
@@ -67,21 +67,33 @@ func _on_spawn_timer_timeout() -> void:
 		var paths = controller.paths[id]
 		for path_id in paths:
 			var path_instance = instance_from_id(path_id)
-			var path_follow_instance = path_instance.get_child(0)
-			spawn(path_follow_instance)
+			spawn(path_instance)
 
 func _on_life_timer_timeout() -> void:
 	update_life()
+
+func _on_body_entered(body: Node2D) -> void:
+	var is_mob = body.is_in_group("mob")
+	var is_enemy = skin_type != SKIN_TYPE.BLUE
+	print(body)
+	if is_mob && is_enemy && body.get_parent().has_method("hit"):
+		var damage = body.get_parent().hit()
+		score -= damage
+		print(body)
+		print("damage=",damage)
+		print("\n")
+		update_ui()
 
 func set_skin() -> void:
 	var current = skins[skin_type]
 	skin.texture = current.texture
 	path_color = current.color
 
-func spawn(path_follow_instance: PathFollow2D) -> void:
-	var instance = pawn_scene.instantiate()
-	instance.scale = Vector2(2, 2)
-	path_follow_instance.add_child(instance)
+func spawn(path_instance: Path2D) -> void:
+	var follower_instance = pawn_scene.instantiate()
+	var body = follower_instance.get_child(0)
+	body.add_to_group("mob")
+	path_instance.add_child(follower_instance)
 
 func update_life() -> void:
 	if path_quantity == 0:

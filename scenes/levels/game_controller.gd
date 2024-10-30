@@ -44,12 +44,8 @@ func create_follow_path() -> void:
 	curve.add_point(enemy_position)
 	
 	var path2d = Path2D.new()
-	var path_follow = PathFollow2D.new()
 	add_child(path2d)
-	path2d.add_child(path_follow)
 	path2d.curve = curve
-	path_follow.h_offset = 0
-	path_follow.v_offset = 0
 	path2d.add_to_group("path")
 	
 	var current_tower_id = current_tower.get_instance_id()

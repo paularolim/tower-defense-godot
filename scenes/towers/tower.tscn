@@ -16,10 +16,10 @@ texture = ExtResource("1_qm274")
 shape = SubResource("RectangleShape2D_uuy3w")
 
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 5.0
 
 [node name="LifeTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 3.0
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -36,6 +36,7 @@ offset_bottom = 11.0
 text = "00"
 horizontal_alignment = 1
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
