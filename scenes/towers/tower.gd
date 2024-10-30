@@ -30,18 +30,24 @@ const MAX_PATH_QUANTITY = 3
 var path_quantity = 0
 
 @export var skin_type: SKIN_TYPE
+@export var score : int
 
 @onready var pawn_scene : PackedScene = preload("res://scenes/characters/pawn.tscn")
 
 @onready var spawn_timer = $SpawnTimer
+@onready var life_timer = $LifeTimer
 @onready var skin = $Sprite2D
 @onready var controller = get_parent().get_node("Controller")
+
+@onready var score_label = $UI/Label
 
 var path_color : Color
 
 func _ready() -> void:
 	set_skin()
+	update_ui()
 	spawn_timer.start()
+	life_timer.start()
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed:
@@ -64,6 +70,9 @@ func _on_spawn_timer_timeout() -> void:
 			var path_follow_instance = path_instance.get_child(0)
 			spawn(path_follow_instance)
 
+func _on_life_timer_timeout() -> void:
+	update_life()
+
 func set_skin() -> void:
 	var current = skins[skin_type]
 	skin.texture = current.texture
@@ -73,3 +82,11 @@ func spawn(path_follow_instance: PathFollow2D) -> void:
 	var instance = pawn_scene.instantiate()
 	instance.scale = Vector2(2, 2)
 	path_follow_instance.add_child(instance)
+
+func update_life() -> void:
+	if path_quantity == 0:
+		score += 1
+		update_ui()
+
+func update_ui() -> void:
+	score_label.text = str(score)
